@@ -1,12 +1,13 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
+from .models import Feed
 
 
-# Create your views here.
-class Feed(APIView):
+class FeedView(APIView):
 
     def get(self, request):
-        return render(request, '../instagram/../templates/feed/main.html')
+        feed_list = Feed.objects.all().order_by('-id')
+        return render(request, 'feed/main.html', context=dict(feed_list=feed_list))
 
     def post(self, request):
-        return render(request, '../instagram/../templates/feed/main.html')
+        return render(request, 'feed/main.html')
