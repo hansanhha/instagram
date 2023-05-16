@@ -1,10 +1,10 @@
-{% load static %}
-
 <!doctype html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% load static %}
+
     <title>Instagram</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
@@ -113,6 +113,13 @@
             width: 45px;
             height: 45px;
             margin-top: 5px;
+            margin-right: 10px;
+        }
+
+        .profile-img-box-conetnt {
+            width: 30px;
+            height: 30px;
+            margin-top: 10px;
             margin-right: 10px;
         }
 
@@ -248,11 +255,11 @@
             flex-direction: column;
         }
 
-        .content_modal_window {
+        .content_image_modal_window {
             background: white;
             border-radius: 12px;
             border: 0px solid rgba(255, 255, 255, 0.18);
-            width: 50%;
+            width: 38%;
             height: 77%;
             position: relative;
             padding-top: 10px;
@@ -260,7 +267,18 @@
             flex-direction: column;
         }
 
-        .modal_title {
+        .content_write_modal_window {
+            background: white;
+            border-radius: 12px;
+            border: 0px solid rgba(255, 255, 255, 0.18);
+            width: 60%;
+            height: 77%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .image_modal_title {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
@@ -270,8 +288,24 @@
             padding: 0 10px;
         }
 
+        .content_modal_title {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            font-weight: bold;
+            border-bottom: solid 1px lightgray;
+            height: 8%;
+            align-items: center;
+            padding: 0 10px;
+        }
+
         .modal_title_side {
             flex: 0 0 40px;
+            text-align: center;
+        }
+
+        .modal_share_side {
+            flex: 0 0 60px;
             text-align: center;
         }
 
@@ -336,21 +370,45 @@
         .modal_image_content {
             display: flex;
             flex-direction: row;
+            height: 92%;
         }
 
         .modal_content_write {
             display: flex;
             flex-direction: column;
-            border-left: 1px solid rgba(0, 0, 0, 0.18);;
+            border-left: 1px solid rgba(0, 0, 0, 0.18);
+            height: 100%;
+            width: 40%;
         }
 
         .feed_content_textarea {
             resize: none;
-            width: 294px;
+            width: 100%;
             border: none;
         }
+
+        .modal-feed-profile-box {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding-left: 10px;
+            height: 10%;
+        }
+
+        .modal_content_textarea {
+            resize: none;
+            width: 97%;
+            height: 100%;
+            padding: 5px 15px;
+            border: 0px white solid;
+        }
+
+        .modal_content_textarea:focus {
+            outline: none;
+            border: 0px white solid;
+        }
+
     </style>
-    {#    modal style#}
 
 </head>
 <body>
@@ -380,7 +438,7 @@
                         <div><span><a href="#" class="black-link">{{ feed.user_id }}</a></span></div>
                     </div>
                     <div class="feed-image">
-                        <img src="{% static 'images/'|add:feed.image %}" alt="galaxy">
+                        <img src="{% get_media_prefix %}{{ feed.image }}" alt="galaxy">
                     </div>
                     <div class="feed-func">
                         <div>
@@ -393,7 +451,7 @@
                         </div>
                     </div>
                     <div class="feed-like">좋아요 {{ feed.like_count }}개</div>
-                    <div class="feed-post-box"><span class="feed-writer">wikipedia</span><span>{{ feed.content }}</span>
+                    <div class="feed-post-box"><span class="feed-writer">{{ feed.user_id }}</span><span>{{ feed.content }}</span>
                     </div>
                     <div class="feed-comment-box"><textarea type="text" placeholder="댓글 달기..."
                                                             class="feed-comment-textarea"></textarea></div>
@@ -463,8 +521,8 @@
 </div>
 
 <div id="modal_add_feed" class="add_image_modal">
-    <div class="image_modal_window">
-        <div class="modal_title">
+    <div class="content_image_modal_window">
+        <div class="image_modal_title">
             <div id="modal_image_pre" class="modal_title_side"></div>
             <div> 새 게시물 만들기</div>
             <div class="modal_title_side" id="modal_right_func_box"><span class="material-symbols-rounded"
@@ -488,32 +546,25 @@
 </div>
 
 <div id="modal_add_feed_content" class="add_content_modal modal_overlay_content">
-    <div class="content_modal_window">
-        <div class="modal_title">
-            <div id="modal_content_pre" class="modal_title_side"><span
+    <div class="content_write_modal_window">
+        <div class="content_modal_title">
+            <div id="modal_content_pre" class="modal_title_side" style="margin-top: 5px"><span
                     class='material-symbols-rounded'>arrow_back</span>
             </div>
             <div style="margin: 5px">새 게시물 만들기</div>
-            <div class="modal_title_side"><span>공유하기</span></div>
+            <div id="modal_share_button" class="modal_share_side"><span>공유하기</span></div>
         </div>
         <div class="modal_image_content">
-            <div id="user_upload_img_content" class="modal_image_upload">
-
+            <div id="user_upload_img_content" class="modal_image_upload" style="width: 60%">
             </div>
             <div class="modal_content_write">
-                <div class="feed_name">
-                    <div class="profile_box">
-                        <img id="input_profile_image" class="profile_img" src="" alt="profile-image">
-                    </div>
-                    <span id="input_user_id" class="feed_name_txt"> user_id </span>
+                <div class="modal-feed-profile-box">
+                    <div class="profile-img-box-conetnt"><img id="input_profile_image" class="profile-img" alt="profile" src="{% static 'images/apple.png' %}"></div>
+                    <div style="margin-top: 0.6rem"><span id="input_user_id">Apple</span></div>
                 </div>
-                <div style="height: 440px">
-                    <textarea id="input_content" class="feed_content_textarea form-control col-sm-5" rows="10"
-                              placeholder="문구 입력..."></textarea>
-                </div>
-                <div style="width: 100%; text-align: center">
-                    <button id="button_write_feed" type="button" class="btn btn-primary" style="width: 268px"> 공유하기
-                    </button>
+                <div style="width: 98%; height: 40%; margin-top: 0.5rem;">
+                    <textarea id="input_content" class="modal_content_textarea" rows="10"; placeholder="문구 입력..."></textarea>
+                    <div style="width: 100%; border: 0.5px gray solid;"></div>
                 </div>
             </div>
         </div>
@@ -528,6 +579,9 @@
     const uploadExplainBox = document.getElementById("upload_explain_box");
     const uploadImgBox = document.getElementById("user_upload_img");
     const uploadImgBoxInContentBox = document.getElementById("user_upload_img_content");
+    const createFeedButton = document.getElementById("modal_share_button");
+    const contentTextarea = document.getElementById("input_content");
+
     let userUploadImageInfo;
 
     const imagePreButton = document.getElementById("modal_image_pre");
@@ -535,14 +589,6 @@
 
     const modalRightFuncButton = document.getElementById("modal_right_func_box");
     const buttonCloseModal = document.getElementById("close_modal");
-
-    buttonAddFeed.addEventListener("click", e => {
-        imageModal.style.display = "flex";
-        document.body.style.overflowY = "hidden";
-    });
-
-    imagePreButton.addEventListener("click", undoEvent)
-    contentPreButton.addEventListener("click", undoEvent)
 
     function undoEvent(e) {
         console.log(e)
@@ -564,11 +610,11 @@
         closeModal.innerText = 'close'
         closeModal.setAttribute('class', 'material-symbols-rounded')
         closeModal.setAttribute('id', 'close_modal')
-        closeModal.setAttribute('onclick', 'closeEvent(event)')
+        closeModal.setAttribute('onclick', 'closeModal(event)')
         $(modalRightChild).replaceWith(closeModal)
     }
 
-    function closeEvent(e) {
+    function closeModal(e) {
         if (imagePreButton != undefined && imagePreButton.hasChildNodes()) imagePreButton.removeChild(imagePreButton.firstChild);
         userUploadImage.style.backgroundImage = "none";
         uploadExplainBox.style.display = "block";
@@ -660,7 +706,68 @@
         }
     }
 
-    buttonCloseModal.addEventListener("click", closeEvent);
+    function validateContent() {
+        const image = $(uploadImgBoxInContentBox).css("background-image").replace(/^url\(['"](.+)['"]\)/, '$1');
+        const content = contentTextarea.value
+        contentTextarea.value = "";
+        const profile_image = $('#input_profile_image').attr('src');
+        const user_id = $('#input_user_id').text();
+
+
+        const file = userUploadImageInfo[0];
+
+        let fd = new FormData();
+
+        fd.append('file', file);
+        fd.append('image', image);
+        fd.append('content', content);
+        fd.append('profile_image', profile_image);
+        fd.append('user_id', user_id);
+
+        if(image.length <= 0)
+        {
+            alert("이미지가 비어있습니다.");
+        }
+        else if(content.length <= 0)
+        {
+            alert("설명을 입력하세요");
+        }
+        else if(profile_image.length <= 0)
+        {
+            alert("프로필 이미지가 비어있습니다.");
+        }
+        else if(user_id.length <= 0)
+        {
+            alert("사용자 id가 없습니다.");
+        }
+        else{
+            writeFeed(fd);
+        }
+    }
+
+    function writeFeed(fd) {
+        $.ajax({
+            url: "/feed",
+            data: fd,
+            method: "POST",
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                console.log(data);
+            },
+            error: function (request, status, error) {
+                console.log('request : '+ request)
+                console.log('status : ' + status)
+                console.log('error : ' + error)
+            },
+            complete: function() {
+                closeModal();
+                location.reload();
+            }
+        })
+    }
+
+    buttonCloseModal.addEventListener("click", closeModal);
 
     $('.modal_image_upload-box')
         .on("dragover", dragOver)
@@ -671,6 +778,16 @@
 
     $('.modal_image_upload_input')
         .on("change", uploadFiles)
+
+    buttonAddFeed.addEventListener("click", e => {
+        imageModal.style.display = "flex";
+        document.body.style.overflowY = "hidden";
+    });
+
+    imagePreButton.addEventListener("click", undoEvent)
+    contentPreButton.addEventListener("click", undoEvent)
+
+    createFeedButton.addEventListener("click", validateContent)
 
 </script>
 

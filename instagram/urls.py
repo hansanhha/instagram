@@ -18,11 +18,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
-
-from feed.views import FeedView
+from feed.views import FeedView, FeedUpload
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', FeedView.as_view())  # as_view()는 Class를 View로 사용할 때 호출
+    path('', FeedView.as_view()),  # as_view()는 Class를 View로 사용할 때 호출
+    path('feed', FeedUpload.as_view())
 ]
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
