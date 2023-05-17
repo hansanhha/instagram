@@ -17,13 +17,14 @@ Including another URLconf
 from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.urls import path
-from feed.views import FeedView, FeedUpload
+from django.urls import path, include
+from content.views import MainFeed, FeedUpload
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', FeedView.as_view()),  # as_view()는 Class를 View로 사용할 때 호출
-    path('feed', FeedUpload.as_view())
+    path('', MainFeed.as_view(), name='index'),  # as_view()는 Class를 View로 사용할 때 호출
+    path('content/', include('content.urls')),
+    path('account/', include('account.urls'))
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
