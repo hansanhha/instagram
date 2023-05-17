@@ -13,7 +13,7 @@ class MainFeed(APIView):
 
     def get(self, request):
         feed_list = Feed.objects.all().order_by('-id')
-        return render(request, 'feed/main.html', context=dict(feed_list=feed_list))
+        return render(request, 'content/feed/../templates/content/main.html', context=dict(feed_list=feed_list))
 
 
 class FeedUpload(APIView):

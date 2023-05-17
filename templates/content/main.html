@@ -17,7 +17,7 @@
     {#   jquery#}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 
-    {#    feed style#}
+    {#    content style#}
     <style>
         .top-nav {
             position: fixed;
@@ -747,7 +747,7 @@
 
     function writeFeed(fd) {
         $.ajax({
-            url: "/feed",
+            url: "/content/feed",
             data: fd,
             method: "POST",
             processData: false,
