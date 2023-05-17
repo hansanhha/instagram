@@ -9,7 +9,7 @@ from instagram.settings import MEDIA_ROOT
 from .models import Feed
 
 
-class FeedView(APIView):
+class MainFeed(APIView):
 
     def get(self, request):
         feed_list = Feed.objects.all().order_by('-id')
