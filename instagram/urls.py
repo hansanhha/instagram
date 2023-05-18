@@ -18,11 +18,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
-from content.views import MainFeed, FeedUpload
+from content.views import MainFeed, FeedView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', MainFeed.as_view(), name='index'),  # as_view()는 Class를 View로 사용할 때 호출
+    path('', MainFeed.as_view(), name='main'),
     path('content/', include('content.urls')),
     path('account/', include('account.urls'))
 ]
